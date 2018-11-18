@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="BigData-Day01" />
+        <module name="BigData-Day02" />
+        <module name="BigData-Kafka" />
+        <module name="HiveUDF" />
+        <module name="Socket-Day01" />
+        <module name="Spring-Day01" />
+        <module name="Spring-Day02" />
+        <module name="Spring-Day03" />
+        <module name="SpringTransaction-Demo" />
+        <module name="SSHDemo" />
+        <module name="Storm-Learn" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="BigData-Day01" target="1.5" />
+      <module name="BigData-Day02" target="1.5" />
+      <module name="BigData-Kafka" target="1.5" />
+      <module name="HiveUDF" target="1.5" />
+      <module name="Socket-Day01" target="1.5" />
+      <module name="Spring-Day01" target="1.6" />
+      <module name="Spring-Day02" target="1.5" />
+      <module name="Spring-Day03" target="1.5" />
+      <module name="SpringDay02" target="1.5" />
+      <module name="SpringTransaction-Demo" target="1.5" />
+      <module name="SSHDemo" target="1.5" />
+      <module name="Storm-Learn" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

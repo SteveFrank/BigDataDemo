@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	    http://www.springframework.org/schema/beans/spring-beans.xsd
+	    http://www.springframework.org/schema/context
+	    http://www.springframework.org/schema/context/spring-context.xsd
+	    http://www.springframework.org/schema/aop
+	    http://www.springframework.org/schema/aop/spring-aop.xsd
+	    http://www.springframework.org/schema/tx
+	    http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- 开启注解扫描 -->
+    <context:component-scan base-package="com.demo2" />
+
+    <!--开启自动代理-->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+        <property name="jdbcUrl" value="jdbc:mysql:///spring_jdbc"></property>
+        <property name="user" value="root"></property>
+        <property name="password" value="admin"></property>
+    </bean>
+
+    <!-- 配置JDBC模板类 -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!-- 配置平台事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!-- 声明式事务（采用XML配置文件的方式）-->
+    <!-- 配置通知 -->
+    <tx:advice transaction-manager="transactionManager" id="myAdvice">
+        <tx:attributes>
+            <tx:method name="pay*" propagation="REQUIRED"/>
+            <!--<tx:method name="find" read-only="true"/>-->
+        </tx:attributes>
+    </tx:advice>
+
+    <!--配置AOP-->
+    <aop:config>
+        <!--Spring 框架提供的通知-->
+        <!--自己写的不适用这个标签-->
+        <aop:advisor advice-ref="myAdvice" pointcut="execution(public * com.*.*.pay(*..*))"/>
+    </aop:config>
+
+</beans>

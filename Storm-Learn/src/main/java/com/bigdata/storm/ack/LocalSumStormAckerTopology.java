@@ -1,0 +1,157 @@
+package com.bigdata.storm.ack;
+
+import java.util.Map;
+
+import org.apache.storm.Config;
+import org.apache.storm.LocalCluster;
+import org.apache.storm.spout.SpoutOutputCollector;
+import org.apache.storm.task.OutputCollector;
+import org.apache.storm.task.TopologyContext;
+import org.apache.storm.topology.OutputFieldsDeclarer;
+import org.apache.storm.topology.TopologyBuilder;
+import org.apache.storm.topology.base.BaseRichBolt;
+import org.apache.storm.topology.base.BaseRichSpout;
+import org.apache.storm.tuple.Fields;
+import org.apache.storm.tuple.Tuple;
+import org.apache.storm.tuple.Values;
+import org.apache.storm.utils.Utils;
+
+/**
+ * @author yangqian
+ * @date 2018/11/3
+ */
+public class LocalSumStormAckerTopology {
+
+    /**
+     * spout 需要继承BaseRichSpout
+     *
+     * 数据源需要产生数据并且发射
+     *
+     * 定义数据源
+     */
+    public static class DataSourceSpout extends BaseRichSpout {
+
+        private SpoutOutputCollector spoutOutputCollector;
+
+        /**
+         * 初始化方法，只会被调用一次
+         * @param conf 配置参数
+         * @param topologyContext 配置拓扑上下文
+         * @param spoutOutputCollector 数据发射器
+         */
+        public void open(
+                Map conf, TopologyContext topologyContext, SpoutOutputCollector spoutOutputCollector) {
+            this.spoutOutputCollector = spoutOutputCollector;
+        }
+
+        int number = 0;
+
+        /**
+         * 会产生数据，在生产上从消息系统获取数据
+         * 该方法是一个死循环
+         * 用于不停的获取数据
+         */
+        public void nextTuple() {
+
+            ++ number;
+
+
+            /**
+             * emit 方法具有两个参数
+             * 1) 数据
+             * 2) 数据的唯一编号 messageID
+             */
+            this.spoutOutputCollector.emit(new Values(number ++), number);
+            System.out.println("Spout : " + number);
+            // 防止数据产生太快
+            Utils.sleep(1000);
+        }
+
+        @Override
+        public void ack(Object msgId) {
+            System.out.println(" ack invoked ... " + msgId);
+        }
+
+        @Override
+        public void fail(Object msgId) {
+            System.out.println(" failed invoked ... " + msgId);
+        }
+
+        /**
+         * 声明输出字段的名称
+         * @param outputFieldsDeclarer 输出声明
+         */
+        public void declareOutputFields(
+                OutputFieldsDeclarer outputFieldsDeclarer) {
+            outputFieldsDeclarer.declare(new Fields("num"));
+        }
+    }
+
+
+    /**
+     * 数据的累积求和 Bolt : 接受数据并且处理
+     */
+    public static class SumBolt extends BaseRichBolt {
+
+        private OutputCollector outputCollector;
+
+        /**
+         * 初始化方法 会被执行一次
+         * @param stormConf
+         * @param context
+         * @param collector
+         */
+        public void prepare(
+                Map stormConf, TopologyContext context, OutputCollector collector) {
+            this.outputCollector = collector;
+        }
+
+        int sum = 0;
+
+        /**
+         * 其实也是一个死循环 职责:获取Spout发送过来的数据
+         * @param input
+         */
+        public void execute(
+                Tuple input) {
+            // Bolt 中获取值可以根据index获取 也可以根据名称获取 建议使用名称获取的方式
+            Integer value = input.getIntegerByField("num");
+            sum += value;
+
+            // 假设大于10的为失败操作
+            if (value > 0 && value <= 10) {
+                // 确认消息处理成功
+                this.outputCollector.ack(input);
+            } else {
+                // 确认消息处理失败
+                this.outputCollector.fail(input);
+            }
+
+            System.out.println("Bolt: sum = [" + sum + "]");
+        }
+
+        public void declareOutputFields(
+                OutputFieldsDeclarer declarer) {
+
+        }
+    }
+
+    /**
+     * 利用本地模式进行测试
+     * @param args
+     */
+    public static void main(String[] args) {
+        // TopologyBuilder 根据Spout和Bolt来构建Topology
+        // Storm中任何一个作业都是通过Topology的方式进行提交
+        // Topology中需要置顶Spout和Bolt的执行顺序
+        TopologyBuilder topologyBuilder = new TopologyBuilder();
+        topologyBuilder.setSpout("DataSourceSpout", new DataSourceSpout());
+        topologyBuilder.setBolt("SumBolt", new SumBolt()).shuffleGrouping("DataSourceSpout");
+
+        // 创建一个本地Storm模式的集群: 本地模式运行 不需要搭建Storm集群
+        LocalCluster localCluster = new LocalCluster();
+        localCluster.submitTopology("LocalSumStormTopology", new Config(), topologyBuilder.createTopology());
+
+    }
+
+}

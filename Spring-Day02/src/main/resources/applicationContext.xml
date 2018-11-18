@@ -1,0 +1,41 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- 开启注解扫描 -->
+    <context:component-scan base-package="com.demo03" />
+    <!-- 编写客户dao -->
+    <bean id="customerDao" class="com.demo03.CustomerDaoImpl"/>
+
+    <!-- 编写切面类配置 -->
+    <bean id="myAspectXml" class="com.demo03.MyAspectXml"/>
+
+    <!-- 配置AOP -->
+    <aop:config>
+        <!-- 配置切面类：切入点和通知 -->
+        <aop:aspect ref="myAspectXml">
+            <!-- 配置前置通知,在save方法之前进行增强 -->
+            <!-- 切入点表达式,execution -->
+
+            <!-- 前置通知 -->
+            <!-- <aop:before method="log" pointcut="(execution(public void com.demo03.CustomerDaoImpl.save()))"/> -->
+            <!-- 切入点的表达式
+                    1、execution() 固定的，不能够写
+                    2、public 可以省略
+                    3、void，返回值可以出现*，表示可以出现void或者返回值，返回值类型不能够不写
+                    4、包名可以使用*代替，不能够不编写，简写方法：*..*方法，必须要有一个包名
+                    5、*DaoImpl
+                    6、方法save*()
+                    7、方法的参数
+              -->
+            <aop:before method="log" pointcut="(execution(* *..*.*DaoImpl.save*(..)))"/>
+            <!-- 后置通知 -->
+            <aop:after method="after" pointcut="(execution(public void com.demo03.CustomerDaoImpl.save()))" />
+            <!-- 环绕通知 -->
+            <aop:around method="around" pointcut="(execution(* *..*.*DaoImpl.save*(..)))" />
+        </aop:aspect>
+    </aop:config>
+
+</beans>

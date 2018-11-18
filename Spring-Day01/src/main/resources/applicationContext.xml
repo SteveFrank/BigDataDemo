@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 使用 bean 标签 -->
+    <bean id="userService" class="com.spring.demo1.UserServiceImpl">
+        <!-- 依赖注入 -->
+        <property name="name" value="小李"></property>
+    </bean>
+
+    <!-- 使用依赖注入 -->
+    <bean id="customerDao" class="com.spring.demo2.CustomerDaoImpl"></bean>
+
+    <bean id="customerService" class="com.spring.demo2.CustomerServiceImpl">
+        <property name="customerDao" ref="customerDao"></property>
+    </bean>
+
+    <!-- 构造函数注入 -->
+    <bean id="car" class="com.spring.demo3.Car">
+        <constructor-arg name="name" value="baoma"></constructor-arg>
+        <constructor-arg name="price" value="500000"></constructor-arg>
+    </bean>
+
+    <!-- 注入集合 -->
+    <bean id="user" class="com.spring.demo3.User">
+        <property name="arrs">
+
+            <list>
+                <value>hello</value>
+                <value>spring</value>
+                <value>IOC</value>
+            </list>
+
+        </property>
+
+        <property name="map">
+
+            <map>
+                <entry key="aaa" value="admin"></entry>
+            </map>
+
+        </property>
+    </bean>
+</beans>

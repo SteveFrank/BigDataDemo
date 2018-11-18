@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BigData-Day01/BigData-Day01.iml" filepath="$PROJECT_DIR$/BigData-Day01/BigData-Day01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BigData-Day02/BigData-Day02.iml" filepath="$PROJECT_DIR$/BigData-Day02/BigData-Day02.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BigData-Kafka/BigData-Kafka/BigData-Kafka.iml" filepath="$PROJECT_DIR$/BigData-Kafka/BigData-Kafka/BigData-Kafka.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DataStructure/DataStructure.iml" filepath="$PROJECT_DIR$/DataStructure/DataStructure.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HiveUDF/HiveUDF.iml" filepath="$PROJECT_DIR$/HiveUDF/HiveUDF.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SSHDemo/SSHDemo.iml" filepath="$PROJECT_DIR$/SSHDemo/SSHDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Scala-Learn/Scala-Learn.iml" filepath="$PROJECT_DIR$/Scala-Learn/Scala-Learn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Socket-Day01/Socket-Day01.iml" filepath="$PROJECT_DIR$/Socket-Day01/Socket-Day01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Spring-Day01/Spring-Day01.iml" filepath="$PROJECT_DIR$/Spring-Day01/Spring-Day01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Spring-Day02/Spring-Day02.iml" filepath="$PROJECT_DIR$/Spring-Day02/Spring-Day02.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Spring-Day03/Spring-Day03.iml" filepath="$PROJECT_DIR$/Spring-Day03/Spring-Day03.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringTransaction-Demo/SpringTransaction-Demo.iml" filepath="$PROJECT_DIR$/SpringTransaction-Demo/SpringTransaction-Demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Storm-Learn/Storm-Learn.iml" filepath="$PROJECT_DIR$/Storm-Learn/Storm-Learn.iml" />
+    </modules>
+  </component>
+</project>
